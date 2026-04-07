@@ -301,11 +301,10 @@ for phase in $(seq $START_PHASE $END_PHASE); do
   PROMPT=$(build_prompt $phase)
   PHASE_LOG="${LOG_DIR}/phase${phase}_busan_$(date +%Y%m%d_%H%M%S).txt"
 
-  # Claude Code CLI 실행
-  if claude -p "$PROMPT" \
+  # Claude Code CLI 실행 (프로젝트 디렉토리에서)
+  if (cd "$PROJECT_DIR" && claude -p "$PROMPT" \
     --output-format text \
-    --max-turns 50 \
-    --cwd "$PROJECT_DIR" \
+    --max-turns 50) \
     2>&1 | tee "$PHASE_LOG"; then
     log "Phase ${phase} 완료 (성공)"
   else
